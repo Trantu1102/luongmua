@@ -81,7 +81,7 @@ const RainfallChart: React.FC<RainfallChartProps> = ({ data, average }) => {
           <span className="w-3 h-3 bg-amber-500 rounded-sm"></span> Năm 2025 (Dự báo/Thực tế)
         </div>
         <div className="flex items-center gap-1">
-          <span className="w-3 h-3 bg-red-500 rounded-sm"></span> Cao bất thường (>20%)
+          <span className="w-3 h-3 bg-red-500 rounded-sm"></span> Cao bất thường {"(>20%)"}
         </div>
       </div>
     </div>
