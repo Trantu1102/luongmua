@@ -1,12 +1,23 @@
 import { GoogleGenAI } from "@google/genai";
 import { AnalysisResult, RainfallYear } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// SỬA LỖI: Đảm bảo sử dụng tên biến môi trường chính xác đã được định nghĩa
+// trong Netlify và inject thông qua Vite.
+// Thay vì process.env.API_KEY, chúng ta sử dụng process.env.VITE_GEMINI_API_KEY
+// (vì chúng ta đã sửa vite.config.ts để inject nó).
+const apiKey = process.env.VITE_GEMINI_API_KEY;
+
+// Kiểm tra nhanh để đảm bảo API Key đã được set (chỉ hiển thị trong log khi build)
+if (!apiKey) {
+  console.error("API Key for Gemini is not set in environment variables!");
+}
+
+const ai = new GoogleGenAI({ apiKey: apiKey });
 
 const MODEL_NAME = 'gemini-2.5-flash';
 
 export const analyzeRainfall = async (provinceName: string): Promise<AnalysisResult> => {
-  
+
   const prompt = `
     Tôi cần tìm kiếm và phân tích dữ liệu lượng mưa trung bình năm (mm) của tỉnh/thành phố "${provinceName}" ở Việt Nam trong 10 năm qua (2015-2024) và năm 2025 (số liệu thực tế hoặc dự báo mới nhất).
     
@@ -41,6 +52,8 @@ export const analyzeRainfall = async (provinceName: string): Promise<AnalysisRes
     const text = response.text || "";
     
     // Extract sources from grounding metadata
+    // Lưu ý: SDK hiện tại sử dụng groundingAttributions, nhưng code này sử dụng groundingChunks.
+    // Chúng ta giữ nguyên groundingChunks cho tương thích, nếu lỗi, cần chuyển sang groundingAttributions.
     const sources = response.candidates?.[0]?.groundingMetadata?.groundingChunks
       ?.map((chunk: any) => {
         if (chunk.web) {
