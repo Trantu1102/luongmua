@@ -1,0 +1,5 @@
+{
+  "name": "Bản đồ lượng mưa tại Việt Nam năm 2025",
+  "description": "A specialized environmental analysis tool providing real-time rainfall data and La Nina impact assessment for Vietnam provinces using Google Search Grounding.",
+  "requestFramePermissions": []
+}
